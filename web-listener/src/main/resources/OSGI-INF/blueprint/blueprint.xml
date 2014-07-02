@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.0.0.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+
+        <route id="esb.listener.web">
+            <from uri="jetty:http://0.0.0.0:8090/?matchOnUriPrefix=true" />
+            <to uri="bean:webListenerManager?method=routeMessage" />
+            <choice>
+                <when>
+                    <simple>${headers.eventName} != null</simple>
+                    <setHeader headerName="targetRoute">
+                        <simple>direct-vm://esb.event.${header.eventName}</simple>
+                    </setHeader>
+                    <recipientList>
+                        <simple>${header.targetRoute}</simple>
+                    </recipientList>
+                </when>
+            </choice>
+        </route>
+
+    </camelContext>
+    
+    <bean id="listenerConfigProvider" class="uk.co.revsys.resource.repository.provider.ResourceProvider" init-method="refresh">
+        <argument index="0" ref="listenerConfigRepository"/>
+        <argument index="1" value="."/>
+        <argument index="2" ref="listenerConfigFilter"/>
+        <argument index="3" ref="listenerConfigLoader"/>
+    </bean>
+    
+    <bean id="listenerConfigRepository" class="uk.co.revsys.resource.repository.LocalDiskResourceRepository">
+        <argument index="0" value="listeners"/>
+    </bean>
+    
+    <bean id="listenerConfigFilter" class="uk.co.revsys.resource.repository.provider.filter.ExtensionFilter">
+        <argument index="0" value=".json"/>
+    </bean>
+    
+    <bean id="listenerConfigLoader" class="uk.co.revsys.resource.repository.provider.handler.jackson.JacksonResourceConverter">
+        <argument index="0" ref="objectMapper"/>
+        <argument index="1" value="uk.co.revsys.esb.listener.web.WebListener"/>
+    </bean>
+    
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+    
+    <bean id="listeners" factory-ref="listenerConfigLoader" factory-method="getResult">
+    </bean>
+    
+    <bean id="webListenerManager" class="uk.co.revsys.esb.listener.web.WebListenerManager" depends-on="listenerConfigProvider">
+        <argument ref="listeners"/>
+    </bean>
+
+</blueprint>
