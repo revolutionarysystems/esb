@@ -43,7 +43,7 @@
         <argument index="0" value=".json"/>
     </bean>
     
-    <bean id="listenerConfigLoader" class="uk.co.revsys.resource.repository.provider.handler.jackson.JacksonResourceConverter">
+    <bean id="listenerConfigLoader" class="uk.co.revsys.resource.repository.provider.handler.json.JsonArrayResourceConverter">
         <argument index="0" ref="objectMapper"/>
         <argument index="1" value="uk.co.revsys.esb.listener.web.WebListener"/>
     </bean>

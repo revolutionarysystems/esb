@@ -41,7 +41,7 @@
         
         <dependency>
             <groupId>uk.co.revsys.resource-repository</groupId>
-            <artifactId>resource-repository-provider-jackson</artifactId>
+            <artifactId>resource-repository-provider-json</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 	</dependencies>
