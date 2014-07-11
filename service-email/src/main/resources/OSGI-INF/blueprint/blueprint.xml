@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.0.0.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+    <cm:property-placeholder id="blueprint.placeholder" persistent-id="service_email" />
+    
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+
+        <route>
+			<from uri="direct-vm:esb.service.email.sendEmail" />
+			<!--<wireTap uri="direct:sendEmail"/>-->
+            <to uri="direct:sendEmail"/>
+		</route>
+
+		<route>
+			<from uri="direct:sendEmail"/>
+			<setProperty propertyName="subject">
+				<simple>${header.subject}</simple>
+			</setProperty>
+			<setProperty propertyName="toAddress">
+				<simple>${header.toAddress}</simple>
+			</setProperty>
+			<setProperty propertyName="fromAddress">
+				<simple>${header.fromAddress}</simple>
+			</setProperty>
+			<removeHeaders pattern="*"/>
+			<setHeader headerName="subject">
+				<simple>${property.subject}</simple>
+			</setHeader>
+			<setHeader headerName="from">
+				<simple>${property.fromAddress}</simple>
+			</setHeader>
+			<setHeader headerName="to">
+				<simple>${property.toAddress}</simple>
+			</setHeader>
+			<recipientList>
+				<simple>smtp://{{smtpAddress}}:{{port}}?username={{username}}&amp;password={{password}}&amp;contentType=text/html</simple>
+			</recipientList>
+		</route>
+        
+    </camelContext>
+
+</blueprint>

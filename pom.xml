@@ -13,6 +13,7 @@
     <modules>
         <module>core</module>
         <module>web-listener</module>
+        <module>service-email</module>
 	</modules>
 
 	<properties>
