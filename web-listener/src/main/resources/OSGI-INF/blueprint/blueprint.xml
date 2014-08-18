@@ -11,7 +11,7 @@
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
 
         <route id="esb.listener.web">
-            <from uri="jetty:http://0.0.0.0:8090/?matchOnUriPrefix=true" />
+            <from uri="jetty:http://0.0.0.0:8090/?matchOnUriPrefix=true&amp;headerFilterStrategy=#headerFilterStrategy" />
             <to uri="bean:webListenerManager?method=routeMessage" />
             <choice>
                 <when>
@@ -56,5 +56,7 @@
     <bean id="webListenerManager" class="uk.co.revsys.esb.listener.web.WebListenerManager" depends-on="listenerConfigProvider">
         <argument ref="listeners"/>
     </bean>
+    
+    <bean id="headerFilterStrategy" class="uk.co.revsys.esb.listener.web.WebListenerHeaderFilterStrategy"/>
 
 </blueprint>
