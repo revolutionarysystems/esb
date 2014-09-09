@@ -12,6 +12,7 @@
     
     <modules>
         <module>core</module>
+        <module>component</module>
         <module>web-listener</module>
         <module>service-email</module>
 	</modules>
