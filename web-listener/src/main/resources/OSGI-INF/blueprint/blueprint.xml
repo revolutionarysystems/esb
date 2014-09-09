@@ -19,9 +19,23 @@
                     <setHeader headerName="targetRoute">
                         <simple>direct-vm://esb.event.${header.eventName}</simple>
                     </setHeader>
-                    <recipientList>
-                        <simple>${header.targetRoute}</simple>
-                    </recipientList>
+                    <doTry>
+                        <recipientList>
+                            <simple>${header.targetRoute}</simple>
+                        </recipientList>
+                        <doCatch>
+                            <exception>org.apache.camel.component.http.HttpOperationFailedException</exception>
+                            <setHeader headerName="CamelHttpResponseCode">
+                                <simple>${exception.statusCode}</simple>
+                            </setHeader>
+                            <setHeader headerName="CamelHttpResponseText">
+                                <simple>${exception.statusText}</simple>
+                            </setHeader>
+                            <setBody>
+                                <simple>${exception.responseBody}</simple>
+                            </setBody>
+                        </doCatch>
+                    </doTry>
                 </when>
             </choice>
         </route>
