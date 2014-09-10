@@ -50,9 +50,14 @@ public abstract class HttpProxyProcessor implements Processor {
         }
         uri = uri + "bridgeEndpoint=" + getBridgeEndpoint() + "&throwExceptionOnFailure=" + getThrowExceptionOnFailure();
         http.createEndpoint(uri).createProducer().process(exchange);
+        postProcess(exchange);
     }
     
     public void preProcess(Exchange exchange) throws Exception{
+        
+    }
+    
+    public void postProcess(Exchange exchange) throws Exception{
         
     }
     
