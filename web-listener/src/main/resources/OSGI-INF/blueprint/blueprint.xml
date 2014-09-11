@@ -25,6 +25,8 @@
                         </recipientList>
                         <doCatch>
                             <exception>org.apache.camel.component.http.HttpOperationFailedException</exception>
+                            <log message="Web Listener caught HttpOperationFailedException: ${exception.statusCode} - ${exception.statusText}"/>
+                            <log message="${exception.responseBody}"/>
                             <setHeader headerName="CamelHttpResponseCode">
                                 <simple>${exception.statusCode}</simple>
                             </setHeader>
