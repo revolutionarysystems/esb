@@ -11,6 +11,9 @@ public abstract class ProcessorComponent extends DefaultComponent{
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         Processor processor = createProcessor(uri, remaining, parameters);
+        if(processor instanceof ComponentAwareProcessor){
+            ((ComponentAwareProcessor)processor).setComponent(this);
+        }
         ProcessorEndpoint endpoint = new ProcessorEndpoint(uri, this, processor);
         setProperties(endpoint.getProcessor(), parameters);
         return endpoint;

@@ -19,6 +19,7 @@ public abstract class MappedProcessorComponent extends ProcessorComponent{
             throw new UnsupportedOperationException(uri + ":" + remaining);
         }
         Processor processor = createProcessor(processorClass, uri, remaining, parameters);
+        configureProcessor(processor);
         return processor;
     }
     
@@ -26,6 +27,10 @@ public abstract class MappedProcessorComponent extends ProcessorComponent{
     
     protected Processor createProcessor(Class<? extends Processor> type, String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return type.newInstance();
+    }
+    
+    protected void configureProcessor(Processor processor){
+        
     }
 
 }

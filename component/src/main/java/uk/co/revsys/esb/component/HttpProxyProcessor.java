@@ -19,6 +19,9 @@ public abstract class HttpProxyProcessor implements Processor {
     protected static final String APPLICATION_JSON = "application/json";
     
     private final String baseUrl;
+    
+    private String authUsername;
+    private String authPassword;
 
     public HttpProxyProcessor(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -49,6 +52,9 @@ public abstract class HttpProxyProcessor implements Processor {
             uri = uri + "?";
         }
         uri = uri + "bridgeEndpoint=" + getBridgeEndpoint() + "&throwExceptionOnFailure=" + getThrowExceptionOnFailure();
+        if(authUsername!=null){
+            uri = uri + "&authMethod=Basic&authUsername=" + getAuthUsername() + "&authPassword=" + getAuthPassword();
+        }
         http.createEndpoint(uri).createProducer().process(exchange);
         postProcess(exchange);
     }
@@ -79,6 +85,22 @@ public abstract class HttpProxyProcessor implements Processor {
     
     public boolean getThrowExceptionOnFailure(){
         return true;
+    }
+
+    public String getAuthUsername() {
+        return authUsername;
+    }
+
+    public void setAuthUsername(String authUsername) {
+        this.authUsername = authUsername;
+    }
+
+    public String getAuthPassword() {
+        return authPassword;
+    }
+
+    public void setAuthPassword(String authPassword) {
+        this.authPassword = authPassword;
     }
 
 }
