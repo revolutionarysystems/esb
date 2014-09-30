@@ -37,6 +37,10 @@ public abstract class HttpProxyProcessor implements Processor {
         if(contentType!=null){
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, contentType);
         }
+        String queryString = getQueryString();
+        if(queryString!=null){
+            exchange.getIn().setHeader(Exchange.HTTP_QUERY, queryString);
+        }
         Map<String, String> postParameters = getPostParameters();
         if(postParameters!=null){
             StringBuilder body = new StringBuilder();
@@ -74,6 +78,10 @@ public abstract class HttpProxyProcessor implements Processor {
     }
     
     public Map<String, String> getPostParameters(){
+        return null;
+    }
+    
+    public String getQueryString(){
         return null;
     }
     
