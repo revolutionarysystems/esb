@@ -1,12 +1,12 @@
 package uk.co.revsys.esb.component;
 
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.component.http.HttpComponent;
 
-public abstract class HttpProxyProcessor implements Processor {
+public abstract class HttpProxyProcessor extends DefaultProcessor implements ParameterAwareProcessor {
 
     protected static final String GET = "GET";
     protected static final String POST = "POST";
@@ -37,19 +37,21 @@ public abstract class HttpProxyProcessor implements Processor {
         if(contentType!=null){
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, contentType);
         }
-        String queryString = getQueryString();
+        String queryString = getQueryString(exchange);
         if(queryString!=null){
             exchange.getIn().setHeader(Exchange.HTTP_QUERY, queryString);
         }
-        Map<String, String> postParameters = getPostParameters();
+        Map<String, String> postParameters = getPostParameters(exchange);
         if(postParameters!=null){
             StringBuilder body = new StringBuilder();
             for(Entry<String, String> postParameter: postParameters.entrySet()){
-                body.append(postParameter.getKey()).append("=").append(postParameter.getValue()).append("&");
+                System.out.println(postParameter.getValue());
+                System.out.println(URLEncoder.encode(postParameter.getValue(), "UTF-8"));
+                body.append(postParameter.getKey()).append("=").append(URLEncoder.encode(postParameter.getValue(), "UTF-8")).append("&");
             }
             exchange.getIn().setBody(body);
         }
-        String uri = baseUrl + getUrlPath();
+        String uri = baseUrl + getUrlPath(exchange);
         if(uri.indexOf("?") > -1){
             uri = uri + "&";
         }else{
@@ -77,15 +79,23 @@ public abstract class HttpProxyProcessor implements Processor {
         return null;
     }
     
+    public Map<String, String> getPostParameters(Exchange exchange){
+        return getPostParameters();
+    }
+    
     public Map<String, String> getPostParameters(){
         return null;
+    }
+    
+    public String getQueryString(Exchange exchange){
+        return getQueryString();
     }
     
     public String getQueryString(){
         return null;
     }
     
-    public abstract String getUrlPath();
+    public abstract String getUrlPath(Exchange exchange);
     
     public boolean getBridgeEndpoint(){
         return true;
