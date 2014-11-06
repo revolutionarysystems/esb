@@ -10,9 +10,20 @@
 
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
 
-        <route id="esb.listener.web">
+        <route>
             <from uri="jetty:http://0.0.0.0:8090/?matchOnUriPrefix=true&amp;headerFilterStrategy=#headerFilterStrategy" />
-            <to uri="bean:webListenerManager?method=routeMessage" />
+            <to uri="bean:privateWebListenerManager?method=routeMessage" />
+            <to uri="direct://esb.weblistener.route.request" />
+        </route>
+        
+        <route>
+            <from uri="jetty:http://0.0.0.0:8091/?matchOnUriPrefix=true&amp;headerFilterStrategy=#headerFilterStrategy" />
+            <to uri="bean:publicWebListenerManager?method=routeMessage" />
+            <to uri="direct://esb.weblistener.route.request" />
+        </route>
+        
+        <route>
+            <from uri="direct://esb.weblistener.route.request" />
             <choice>
                 <when>
                     <simple>${headers.eventName} != null</simple>
@@ -69,8 +80,16 @@
     <bean id="listeners" factory-ref="listenerConfigLoader" factory-method="getResult">
     </bean>
     
-    <bean id="webListenerManager" class="uk.co.revsys.esb.listener.web.WebListenerManager" depends-on="listenerConfigProvider">
+    <bean id="privateWebListenerManager" class="uk.co.revsys.esb.listener.web.WebListenerManager" depends-on="listenerConfigProvider">
         <argument ref="listeners"/>
+        <argument value="private"/>
+        <argument value="true"/>
+    </bean>
+    
+    <bean id="publicWebListenerManager" class="uk.co.revsys.esb.listener.web.WebListenerManager" depends-on="listenerConfigProvider">
+        <argument ref="listeners"/>
+        <argument value="public"/>
+        <argument value="false"/>
     </bean>
     
     <bean id="headerFilterStrategy" class="uk.co.revsys.esb.listener.web.WebListenerHeaderFilterStrategy"/>

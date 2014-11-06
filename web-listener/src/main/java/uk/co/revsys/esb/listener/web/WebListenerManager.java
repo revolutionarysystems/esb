@@ -1,17 +1,34 @@
 package uk.co.revsys.esb.listener.web;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 
-public class WebListenerManager{
+public class WebListenerManager {
 
-    private List<WebListener> listeners;
+    private List<WebListener> listeners = new LinkedList<WebListener>();
 
     public WebListenerManager(List<WebListener> listeners) {
-        this.listeners = listeners;
+        this(listeners, null);
+    }
+    
+    public WebListenerManager(List<WebListener> listeners, String group) {
+        this(listeners, group, false);
+    }
+
+    public WebListenerManager(List<WebListener> listeners, String group, boolean includeUngrouped) {
+        if (group == null) {
+            this.listeners = listeners;
+        } else {
+            for (WebListener listener : listeners) {
+                if(group.equals(listener.getGroup()) || (includeUngrouped && listener.getGroup() == null)){
+                    this.listeners.add(listener);
+                }
+            }
+        }
     }
 
     public void routeMessage(Message message) {
@@ -28,7 +45,7 @@ public class WebListenerManager{
             }
         }
         message.setHeader("eventName", eventName);
-        if(eventName == null){
+        if (eventName == null) {
             message.setHeader(Exchange.HTTP_RESPONSE_CODE, 404);
         }
     }
