@@ -8,7 +8,3 @@ notifications:
     - adam@revolutionarysystems.co.uk
     - andrew@revolutionarysystems.co.uk
     - ci@revolutionarysystems.co.uk
-branches:
-  only:
-    - master
-    - production
