@@ -52,6 +52,13 @@
                 </when>
             </choice>
         </route>
+        
+        <route>
+            <from uri="direct-vm://esb.event.status" />
+            <setHeader headerName="CamelHttpResponseCode">
+                <constant>200</constant>
+            </setHeader>
+        </route>
 
     </camelContext>
     

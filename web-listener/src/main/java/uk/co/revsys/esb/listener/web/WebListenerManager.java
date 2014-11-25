@@ -44,6 +44,9 @@ public class WebListenerManager {
                 break;
             }
         }
+        if(incomingUrl.equals("/") && eventName == null){
+            eventName = "status";
+        }
         message.setHeader("eventName", eventName);
         if (eventName == null) {
             message.setHeader(Exchange.HTTP_RESPONSE_CODE, 404);
