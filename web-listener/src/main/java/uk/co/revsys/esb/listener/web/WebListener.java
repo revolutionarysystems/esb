@@ -1,11 +1,12 @@
 package uk.co.revsys.esb.listener.web;
 
+import java.util.List;
 import uk.co.revsys.esb.listener.Listener;
 
-public class WebListener extends Listener{
+public class WebListener extends Listener {
 
     private String urlPattern;
-    private String group;
+    private List<String> groups;
 
     public WebListener() {
     }
@@ -15,10 +16,10 @@ public class WebListener extends Listener{
         this.urlPattern = urlPattern;
     }
 
-    public WebListener(String eventName, String urlPattern, String group) {
+    public WebListener(String eventName, String urlPattern, List<String> groups) {
         super(eventName);
         this.urlPattern = urlPattern;
-        this.group = group;
+        this.groups = groups;
     }
 
     public String getUrlPattern() {
@@ -29,12 +30,12 @@ public class WebListener extends Listener{
         this.urlPattern = urlPattern;
     }
 
-    public String getGroup() {
-        return group;
+    public List<String> getGroups() {
+        return groups;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setGroups(List<String> groups) {
+        this.groups = groups;
     }
-    
+
 }

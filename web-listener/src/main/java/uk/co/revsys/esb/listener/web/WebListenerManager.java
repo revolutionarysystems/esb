@@ -24,7 +24,7 @@ public class WebListenerManager {
             this.listeners = listeners;
         } else {
             for (WebListener listener : listeners) {
-                if(group.equals(listener.getGroup()) || (includeUngrouped && listener.getGroup() == null)){
+                if(((listener.getGroups() == null || listener.getGroups().isEmpty()) && includeUngrouped) || (listener.getGroups()!=null && listener.getGroups().contains(group))){
                     this.listeners.add(listener);
                 }
             }
