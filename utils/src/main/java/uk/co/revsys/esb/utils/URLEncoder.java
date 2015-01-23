@@ -29,8 +29,9 @@ public class URLEncoder {
         StringBuilder result = new StringBuilder();
         String[] parameters = queryString.split("&");
         for(String parameter: parameters){
-            String[] tokens = parameter.split("=");
-            result.append(tokens[0]).append("=").append(encode(tokens[1], encoding)).append("&");
+            String name = parameter.substring(0, parameter.indexOf("="));
+            String value = parameter.substring(parameter.indexOf("=")+1);
+            result.append(name).append("=").append(encode(value, encoding)).append("&");
         }
         String resultString = result.toString();
         if(resultString.endsWith("&")){
