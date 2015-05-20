@@ -11,6 +11,7 @@ public class UtilsComponent extends MappedProcessorComponent{
         mappings.put("encode", URLEncoderProcessor.class);
         mappings.put("encodeQueryString", URLQueryStringEncoderProcessor.class);
         mappings.put("decode", URLDecoderProcessor.class);
+        mappings.put("jexl", JEXLProcessor.class);
     }
 
 }

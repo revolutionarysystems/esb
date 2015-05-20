@@ -21,6 +21,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-jexl</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
             <version>2.10.6</version>
@@ -67,7 +72,7 @@
                         <Bundle-SymbolicName>esb-utils</Bundle-SymbolicName>
                         <Private-Package>uk.co.revsys.esb.utils.*</Private-Package>
                         <Import-Package>*</Import-Package>
-                        <Embed-Dependency>esb-component</Embed-Dependency>
+                        <Embed-Dependency>esb-component,commons-jexl</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                     </instructions>
                 </configuration>
