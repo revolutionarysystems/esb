@@ -25,9 +25,13 @@ public class JEXLProcessor implements Processor, ParameterAwareProcessor{
     }
     
     @Override
-    public void process(Exchange exchng) throws Exception {
+    public void process(Exchange exchange) throws Exception {
         JexlContext context = new MapContext();
-        exchng.getIn().setBody(jexlEngine.createScript(expression).execute(context));
+        context.set("exchange", exchange);
+        context.set("headers", exchange.getIn().getHeaders());
+        context.set("properties", exchange.getProperties());
+        context.set("body", exchange.getIn().getBody());
+        exchange.getIn().setBody(jexlEngine.createScript(expression).execute(context));
     }
     
 }
