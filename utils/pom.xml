@@ -32,6 +32,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.5.4</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test</artifactId>
             <version>2.9.0</version>      
@@ -72,7 +79,7 @@
                         <Bundle-SymbolicName>esb-utils</Bundle-SymbolicName>
                         <Private-Package>uk.co.revsys.esb.utils.*</Private-Package>
                         <Import-Package>*</Import-Package>
-                        <Embed-Dependency>esb-component,commons-jexl</Embed-Dependency>
+                        <Embed-Dependency>esb-component,commons-jexl,javax.mail-api</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                     </instructions>
                 </configuration>
